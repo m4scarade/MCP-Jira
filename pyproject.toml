@@ -1,0 +1,17 @@
+[project]
+name = "mcp-jira"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.128.8",
+    "httpx>=0.28.1",
+    "mcp>=1.26.0",
+    "psycopg[binary]>=3.3.2",
+    "pydantic-settings>=2.12.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "sqlmodel>=0.0.33",
+    "uvicorn[standard]>=0.40.0",
+]

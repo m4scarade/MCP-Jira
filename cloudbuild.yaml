@@ -1,0 +1,50 @@
+steps:
+  # 1) Installer uv et les dépendances + lancer les tests
+  - name: 'python:3.11'
+    id: 'install-and-test'
+    entrypoint: 'bash'
+    args:
+      - -lc
+      - |
+        pip install --no-cache-dir uv
+        uv sync --frozen
+        uv run pytest
+
+  # 2) Construire l'image Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-image'
+    args:
+      [
+        'build',
+        '-t',
+        'gcr.io/$PROJECT_ID/llm-task-manager:$COMMIT_SHA',
+        '.'
+      ]
+
+  # 3) Pousser l'image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-image'
+    args:
+      [
+        'push',
+        'gcr.io/$PROJECT_ID/llm-task-manager:$COMMIT_SHA'
+      ]
+
+  # 4) Déployer sur Cloud Run (europe-west1) avec Cloud SQL
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy-cloud-run'
+    args:
+      [
+        'run', 'deploy', 'llm-task-manager',
+        '--image', 'gcr.io/$PROJECT_ID/llm-task-manager:$COMMIT_SHA',
+        '--region', 'europe-west1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--port', '8000',
+        '--add-cloudsql-instances', '$INSTANCE_CONNECTION_NAME',
+        '--set-env-vars',
+        'DATABASE_URL=postgresql+psycopg://$DB_USER:$DB_PASSWORD@/$DB_NAME?host=/cloudsql/$INSTANCE_CONNECTION_NAME'
+      ]
+
+substitutions:
+  _SERVICE_NAME: 'llm-task-manager'
