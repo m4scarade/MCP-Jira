@@ -52,6 +52,10 @@ Note : en production, utilisez des migrations (Alembic) et une configuration sé
 
 ## Commandes utiles
 
+- Lancer le serveur (dans l'environnement virtuel .venv) :
+
+  python -m app.mcp.server   
+
 - Initialiser la base (création des tables en dev) :
 
   # Les tables sont créées automatiquement au démarrage via init_db().
