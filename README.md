@@ -3,17 +3,17 @@
 Projet minimal type "Jira" pour LLMs — REST API avec FastAPI, modèles SQLModel et outils MCP.
 
 Ce dépôt fournit une API pour gérer des projets, epics, stories, sprints, commentaires et documents.
+Ainsi qu'un déploiement sur GCP pour l'utilisation de l'outils MCP en distanciel.
 
 ---
 
 ## Prérequis
 
-- macOS (ou Linux)
 - Python 3.12+
 - zsh (instructions compatibles)
 - Git
 
-Remarque : le projet utilise SQLite par défaut en développement. Pour la production, configurez une base PostgreSQL et la variable d'environnement `DATABASE_URL`.
+Remarque : le projet utilise SQLite par défaut en développement local.
 
 ---
 
@@ -42,21 +42,13 @@ La commande `pip install -e .` installe les dépendances listées dans `pyprojec
 
 Par défaut, l'application utilise SQLite : `sqlite:///./dev.db`.
 
-Pour utiliser PostgreSQL, exportez la variable d'environnement `DATABASE_URL` avant de lancer l'application, par exemple :
-
-  export DATABASE_URL="postgresql+psycopg://user:password@localhost:5432/llm_task_manager"
-
 Note : en production, utilisez des migrations (Alembic) et une configuration sécurisée.
 
 ---
 
-## Commandes utiles
+## Commandes utiles API et Docker
 
-- Lancer le serveur (dans l'environnement virtuel .venv) :
-
-  python -m app.mcp.server   
-
-- Initialiser la base (création des tables en dev) :
+- Initialiser la base (création des tables en dev, optionnel) :
 
   # Les tables sont créées automatiquement au démarrage via init_db().
   # Pour forcer la création depuis un shell Python :
